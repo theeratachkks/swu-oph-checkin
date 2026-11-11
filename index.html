@@ -3,93 +3,172 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ระบบลงทะเบียนนิสิตช่วยงาน SWU OPH 2026 (3 วัน)</title>
+  <title>SWU OPH 2026 - QUEST REGISTRATION</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style> body { font-family: 'Kanit', sans-serif; } </style>
+  <!-- Google Fonts: สไตล์เกมตู้ 8-Bit + ฟอนต์ไทยอ่านง่ายคมชัด -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Kanit:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    body { 
+      font-family: 'Kanit', sans-serif; 
+      image-rendering: pixelated;
+    }
+    .pixel-font { font-family: 'Press Start 2P', monospace; }
+    /* สไตล์เงาเหลี่ยมแบบ Pixel Art */
+    .pixel-box {
+      border: 4px solid #000;
+      box-shadow: 5px 5px 0px #000;
+    }
+    .pixel-btn {
+      border: 3px solid #000;
+      box-shadow: 4px 4px 0px #000;
+      transition: all 0.05s ease-in-out;
+    }
+    .pixel-btn:hover:not(:disabled) {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px #000;
+    }
+    .pixel-btn:active:not(:disabled) {
+      transform: translate(4px, 4px);
+      box-shadow: 0px 0px 0px #000;
+    }
+  </style>
 </head>
-<body class="bg-slate-50 min-h-screen py-8 px-4 sm:px-6">
+<body class="bg-[#181425] text-slate-900 min-h-screen py-8 px-4 sm:px-6 relative selection:bg-yellow-400 selection:text-black">
+
+  <!-- แถบด้านบน: ปุ่ม Admin Panel -->
+  <div class="max-w-2xl mx-auto flex justify-end mb-3">
+    <button onclick="openAdminModal()" class="pixel-btn bg-purple-600 hover:bg-purple-500 text-white px-3 py-1.5 text-xs pixel-font flex items-center gap-1.5 rounded-none">
+      👾 [ADMIN]
+    </button>
+  </div>
 
   <div class="max-w-2xl mx-auto">
-    <!-- Header -->
-    <div class="bg-gradient-to-r from-red-700 to-rose-600 text-white p-6 rounded-3xl shadow-xl text-center mb-6">
-      <span class="bg-white/20 text-xs px-3 py-1 rounded-full font-semibold tracking-wider uppercase">SWU OPH 2026</span>
-      <h1 class="text-2xl sm:text-3xl font-bold mt-2">ระบบลงทะเบียนนิสิตช่วยงาน</h1>
-      <p class="text-rose-100 text-sm mt-1">รายงานตัวปฏิบัติหน้าที่ (วันที่ 13 - 14 - 15)</p>
+    <!-- Header หัวเกม 8-Bit -->
+    <div class="pixel-box bg-[#e03131] text-white p-6 mb-6 text-center">
+      <div class="pixel-font text-xs tracking-widest text-yellow-300 animate-pulse mb-1">★ MISSION: SWU OPH 2026 ★</div>
+      <h1 class="text-2xl sm:text-3xl font-black tracking-wide text-white drop-shadow-[2px_2px_0px_#000]">
+        ระบบลงทะเบียนนิสิตช่วยงาน
+      </h1>
+      <p class="text-yellow-100 text-xs sm:text-sm mt-1">กรอกข้อมูลรายงานตัวเข้าสู่ด่านปฏิบัติการ</p>
     </div>
 
-    <!-- กล่องค้นหา -->
-    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 mb-6">
-      <label class="block text-gray-700 font-semibold mb-2">ค้นหาด้วยรหัสนิสิต (11 หลัก) หรือชื่อ-นามสกุล</label>
-      <div class="flex gap-2">
-        <input type="text" id="searchInput" placeholder="กรุณากรอกรหัสนิสิต หรือ ชื่อ-นามสกุล" 
-          class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-600 focus:outline-none">
-        <button onclick="searchStudent()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-medium transition shadow-md">
-          ค้นหา
+    <!-- กล่องค้นหาผู้เล่น (Player Search) -->
+    <div class="pixel-box bg-[#f8fafc] p-6 mb-6">
+      <label class="block font-bold text-sm mb-2 text-gray-800">
+        ▶ ค้นหาด้วยรหัสนิสิต (11 หลัก) หรือชื่อ-นามสกุล:
+      </label>
+      <div class="flex flex-col sm:flex-row gap-2">
+        <input type="text" id="searchInput" placeholder="เช่น 67105010177..." 
+          class="pixel-box w-full px-4 py-2.5 font-bold focus:outline-none focus:bg-yellow-50 bg-white">
+        <button onclick="searchStudent()" class="pixel-btn bg-[#2f9e44] hover:bg-[#2b8a3e] text-white px-6 py-2.5 font-bold text-base flex-shrink-0">
+          ค้นหา 🔍
         </button>
       </div>
-      <div id="loader" class="text-center py-3 text-sm text-gray-500 hidden">กำลังดึงข้อมูล...</div>
+      <div id="loader" class="text-center py-2 text-sm text-gray-500 pixel-font hidden mt-2">LOADING DATA...</div>
     </div>
 
-    <!-- การ์ดแสดงผลข้อมูลและปุ่มลงทะเบียน 3 วัน -->
-    <div id="resultCard" class="hidden bg-white rounded-3xl shadow-lg border border-gray-100 p-6">
-      <!-- ข้อมูลส่วนตัว -->
-      <div class="border-b border-gray-100 pb-4 mb-4">
-        <h2 id="resName" class="text-xl font-bold text-gray-800"></h2>
-        <p id="resId" class="text-gray-500 font-mono text-sm"></p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3 text-sm text-gray-600">
-          <p><strong class="text-gray-800">คณะ:</strong> <span id="resFaculty"></span></p>
-          <p><strong class="text-gray-800">ฝ่าย:</strong> <span id="resRole" class="text-red-600 font-semibold"></span></p>
+    <!-- การ์ดแสดงผลข้อมูลและสถานะ 3 วัน -->
+    <div id="resultCard" class="hidden pixel-box bg-white p-6">
+      <div class="border-b-4 border-black pb-4 mb-4">
+        <div class="flex justify-between items-start">
+          <div>
+            <span class="pixel-font text-[10px] bg-yellow-300 px-2 py-0.5 border-2 border-black font-bold">PLAYER INFO</span>
+            <h2 id="resName" class="text-xl sm:text-2xl font-black mt-2 text-gray-900"></h2>
+            <p id="resId" class="text-gray-600 font-mono text-sm font-bold"></p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mt-3 text-sm font-bold text-gray-700 bg-gray-100 p-3 border-2 border-dashed border-gray-400">
+          <p>🎓 คณะ: <span id="resFaculty" class="font-normal"></span></p>
+          <p>⚔️ ฝ่าย: <span id="resRole" class="text-red-600 font-black"></span></p>
         </div>
       </div>
 
-      <!-- ส่วนลงทะเบียนรายวัน (13, 14, 15) -->
-      <h3 class="font-bold text-gray-800 mb-3 text-sm uppercase tracking-wider">สถานะการลงทะเบียน 3 วัน</h3>
-      
+      <!-- ส่วนตรวจสอบ 3 วัน (STAGE 13, 14, 15) -->
+      <div class="pixel-font text-xs text-gray-700 mb-3 font-bold">SELECT QUEST DAY:</div>
       <div class="space-y-3">
-        <!-- วันที่ 13 -->
-        <div class="flex items-center justify-between p-3.5 rounded-2xl border border-gray-100 bg-slate-50">
+        <!-- Day 13 -->
+        <div class="pixel-box p-3 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <div class="font-semibold text-gray-800">วันที่ 13</div>
-            <div id="status13" class="text-xs text-gray-500">ยังไม่ลงทะเบียน</div>
+            <div class="font-black text-gray-800 text-sm">📅 วันที่ 13</div>
+            <div id="status13" class="text-xs font-bold text-gray-500 mt-0.5">...</div>
           </div>
-          <button id="btn13" onclick="confirmDay('13')" class="px-4 py-2 rounded-xl text-sm font-semibold transition"></button>
+          <button id="btn13" onclick="confirmDay('13')" class="pixel-btn px-4 py-2 font-bold text-xs"></button>
         </div>
 
-        <!-- วันที่ 14 -->
-        <div class="flex items-center justify-between p-3.5 rounded-2xl border border-gray-100 bg-slate-50">
+        <!-- Day 14 -->
+        <div class="pixel-box p-3 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <div class="font-semibold text-gray-800">วันที่ 14</div>
-            <div id="status14" class="text-xs text-gray-500">ยังไม่ลงทะเบียน</div>
+            <div class="font-black text-gray-800 text-sm">📅 วันที่ 14</div>
+            <div id="status14" class="text-xs font-bold text-gray-500 mt-0.5">...</div>
           </div>
-          <button id="btn14" onclick="confirmDay('14')" class="px-4 py-2 rounded-xl text-sm font-semibold transition"></button>
+          <button id="btn14" onclick="confirmDay('14')" class="pixel-btn px-4 py-2 font-bold text-xs"></button>
         </div>
 
-        <!-- วันที่ 15 -->
-        <div class="flex items-center justify-between p-3.5 rounded-2xl border border-gray-100 bg-slate-50">
+        <!-- Day 15 -->
+        <div class="pixel-box p-3 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <div class="font-semibold text-gray-800">วันที่ 15</div>
-            <div id="status15" class="text-xs text-gray-500">ยังไม่ลงทะเบียน</div>
+            <div class="font-black text-gray-800 text-sm">📅 วันที่ 15</div>
+            <div id="status15" class="text-xs font-bold text-gray-500 mt-0.5">...</div>
           </div>
-          <button id="btn15" onclick="confirmDay('15')" class="px-4 py-2 rounded-xl text-sm font-semibold transition"></button>
+          <button id="btn15" onclick="confirmDay('15')" class="pixel-btn px-4 py-2 font-bold text-xs"></button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal แผงควบคุม ADMIN สำหรับเปิด-ปิดวัน -->
+  <div id="adminModal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div class="pixel-box bg-white max-w-sm w-full p-6">
+      <div class="flex justify-between items-center border-b-4 border-black pb-2 mb-4">
+        <h3 class="pixel-font text-sm font-bold text-purple-700">👾 ADMIN PANEL</h3>
+        <button onclick="closeAdminModal()" class="font-black text-lg">✕</button>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold mb-1">ใส่รหัสผ่าน ADMIN PIN:</label>
+          <input type="password" id="adminPin" placeholder="ค่าเริ่มต้น 1234" 
+            class="pixel-box w-full px-3 py-2 text-center text-lg font-mono tracking-widest focus:outline-none bg-yellow-50">
+        </div>
+
+        <div class="border-2 border-black p-3 bg-slate-50 space-y-2">
+          <label class="flex items-center gap-2 cursor-pointer font-bold text-sm">
+            <input type="checkbox" id="cfg13" class="w-5 h-5 accent-red-600">
+            <span>เปิดลงทะเบียน วันที่ 13</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer font-bold text-sm">
+            <input type="checkbox" id="cfg14" class="w-5 h-5 accent-red-600">
+            <span>เปิดลงทะเบียน วันที่ 14</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer font-bold text-sm">
+            <input type="checkbox" id="cfg15" class="w-5 h-5 accent-red-600">
+            <span>เปิดลงทะเบียน วันที่ 15</span>
+          </label>
+        </div>
+
+        <button onclick="saveAdminConfig()" class="pixel-btn w-full bg-purple-600 hover:bg-purple-700 text-white font-black py-2.5">
+          💾 บันทึกการตั้งค่า
+        </button>
       </div>
     </div>
   </div>
 
   <script>
     // ** ใส่ Web App URL ของคุณที่นี่ **
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxw2j0Dm58zqoLHz3bpl50C6mrM6Jv4Ig2UPuz6ONnL35EVKunCOfAr0wTwfwduDRdd/exec';
-    
+    const API_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
     let studentsData = [];
+    let configData = { day13: true, day14: false, day15: false };
     let currentStudent = null;
 
     async function loadData() {
       document.getElementById('loader').classList.remove('hidden');
       try {
         const res = await fetch(API_URL);
-        studentsData = await res.json();
+        const data = await res.json();
+        studentsData = data.students || [];
+        configData = data.config || configData;
       } catch (err) {
         console.error("โหลดข้อมูลล้มเหลว", err);
       } finally {
@@ -107,35 +186,45 @@
 
       if (currentStudent) {
         document.getElementById('resName').innerText = currentStudent.name;
-        document.getElementById('resId').innerText = `รหัสนิสิต: ${currentStudent.studentId}`;
+        document.getElementById('resId').innerText = `ID: ${currentStudent.studentId}`;
         document.getElementById('resFaculty').innerText = currentStudent.faculty;
         document.getElementById('resRole').innerText = currentStudent.role;
 
-        renderDayStatus('13', currentStudent.day13);
-        renderDayStatus('14', currentStudent.day14);
-        renderDayStatus('15', currentStudent.day15);
+        renderDayStatus('13', currentStudent.day13, configData.day13);
+        renderDayStatus('14', currentStudent.day14, configData.day14);
+        renderDayStatus('15', currentStudent.day15, configData.day15);
 
         card.classList.remove('hidden');
       } else {
         card.classList.add('hidden');
-        Swal.fire('ไม่พบข้อมูล', 'ไม่พบรายชื่อในระบบ SWU OPH 2026', 'warning');
+        Swal.fire({
+          icon: 'error',
+          title: 'GAME OVER',
+          text: 'ไม่พบรายชื่อนิสิตในระบบ SWU OPH 2026',
+          confirmButtonColor: '#000'
+        });
       }
     }
 
-    function renderDayStatus(day, timeValue) {
+    function renderDayStatus(day, timeValue, isOpen) {
       const statusEl = document.getElementById(`status${day}`);
       const btn = document.getElementById(`btn${day}`);
 
       if (timeValue) {
-        statusEl.innerHTML = `<span class="text-emerald-600 font-medium">✓ ลงทะเบียนแล้ว</span> (${timeValue})`;
+        statusEl.innerHTML = `<span class="text-green-600 font-bold">★ ลงทะเบียนแล้ว</span> (${timeValue})`;
         btn.disabled = true;
-        btn.innerText = 'เรียบร้อย';
-        btn.className = 'px-4 py-2 bg-gray-200 text-gray-500 text-sm font-semibold rounded-xl cursor-not-allowed';
+        btn.innerText = 'CLEARED ✔';
+        btn.className = 'pixel-btn px-4 py-2 bg-gray-200 text-gray-500 cursor-not-allowed border-gray-400';
+      } else if (!isOpen) {
+        statusEl.innerHTML = `<span class="text-red-500 font-bold">🔒 ปิดรับลงทะเบียน</span>`;
+        btn.disabled = true;
+        btn.innerText = 'LOCKED ✕';
+        btn.className = 'pixel-btn px-4 py-2 bg-gray-200 text-gray-400 cursor-not-allowed border-gray-300';
       } else {
-        statusEl.innerText = 'ยังไม่ลงทะเบียน';
+        statusEl.innerHTML = `<span class="text-blue-600 font-bold">⚡ พร้อมลงทะเบียน</span>`;
         btn.disabled = false;
-        btn.innerText = `ลงทะเบียนวันที่ ${day}`;
-        btn.className = 'px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl transition shadow-sm';
+        btn.innerText = `ลงทะเบียนวันที่ ${day} ▶`;
+        btn.className = 'pixel-btn px-4 py-2 bg-[#fcc419] hover:bg-[#fab005] text-black font-black';
       }
     }
 
@@ -143,26 +232,28 @@
       if (!currentStudent) return;
 
       const confirm = await Swal.fire({
-        title: `ลงทะเบียนวันที่ ${day}`,
-        text: `คุณต้องการยืนยันการรายงานตัวสำหรับ วันที่ ${day} ใช่หรือไม่?`,
+        title: `ยืนยันเควสต์วันที่ ${day}?`,
+        text: `คุณกำลังจะลงทะเบียนเข้าร่วม วันที่ ${day}`,
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'ยืนยัน',
+        confirmButtonText: 'ยืนยันลงทะเบียน',
         cancelButtonText: 'ยกเลิก',
-        confirmButtonColor: '#059669'
+        confirmButtonColor: '#2b8a3e',
+        cancelButtonColor: '#e03131'
       });
 
       if (!confirm.isConfirmed) return;
 
       const btn = document.getElementById(`btn${day}`);
       btn.disabled = true;
-      btn.innerText = 'กำลังบันทึก...';
+      btn.innerText = 'SAVING...';
 
       try {
         const res = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ 
+            action: 'register',
             studentId: currentStudent.studentId,
             day: day 
           })
@@ -171,15 +262,72 @@
         const data = await res.json();
 
         if (data.status === 'success') {
-          Swal.fire('สำเร็จ!', `บันทึกการลงทะเบียนวันที่ ${day} เรียบร้อย`, 'success');
+          Swal.fire({
+            icon: 'success',
+            title: 'MISSION COMPLETE!',
+            text: `ลงทะเบียนวันที่ ${day} เรียบร้อยแล้ว`,
+            confirmButtonColor: '#000'
+          });
           currentStudent[`day${day}`] = data.timestamp;
-          renderDayStatus(day, data.timestamp);
+          renderDayStatus(day, data.timestamp, configData[`day${day}`]);
         } else {
           throw new Error(data.message);
         }
       } catch (err) {
-        Swal.fire('ผิดพลาด', err.message, 'error');
-        renderDayStatus(day, currentStudent[`day${day}`]);
+        Swal.fire('ERROR', err.message, 'error');
+        renderDayStatus(day, currentStudent[`day${day}`], configData[`day${day}`]);
+      }
+    }
+
+    // Modal Admin Functions
+    function openAdminModal() {
+      document.getElementById('cfg13').checked = configData.day13;
+      document.getElementById('cfg14').checked = configData.day14;
+      document.getElementById('cfg15').checked = configData.day15;
+      document.getElementById('adminPin').value = '';
+      document.getElementById('adminModal').classList.remove('hidden');
+    }
+
+    function closeAdminModal() {
+      document.getElementById('adminModal').classList.add('hidden');
+    }
+
+    async function saveAdminConfig() {
+      const pin = document.getElementById('adminPin').value.trim();
+      if (!pin) {
+        Swal.fire('เตือน', 'กรุณากรอกรหัสผ่าน Admin PIN', 'warning');
+        return;
+      }
+
+      const newConfig = {
+        day13: document.getElementById('cfg13').checked,
+        day14: document.getElementById('cfg14').checked,
+        day15: document.getElementById('cfg15').checked
+      };
+
+      Swal.showLoading();
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({
+            action: 'updateConfig',
+            pin: pin,
+            config: newConfig
+          })
+        });
+
+        const data = await res.json();
+        if (data.status === 'success') {
+          configData = newConfig;
+          Swal.fire('สำเร็จ', data.message, 'success');
+          closeAdminModal();
+          if (currentStudent) searchStudent(); // รีเฟรชสถานะปุ่ม
+        } else {
+          Swal.fire('รหัสผ่านผิด', data.message, 'error');
+        }
+      } catch (err) {
+        Swal.fire('ข้อผิดพลาด', err.message, 'error');
       }
     }
   </script>
