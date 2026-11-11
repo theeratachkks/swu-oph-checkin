@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DASHBOARD - SWU OPH 2026</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: 8-Bit + ฟอนต์ไทยคมชัด -->
+  <!-- นำเข้าไลบรารี Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Kanit:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Kanit', sans-serif; image-rendering: pixelated; }
@@ -24,9 +25,14 @@
       <a href="../" class="pixel-btn bg-white hover:bg-yellow-100 text-xs px-3 py-2 font-bold flex items-center gap-2">
         ◀ หน้าลงทะเบียน
       </a>
-      <button onclick="fetchData()" class="pixel-btn bg-green-500 hover:bg-green-400 text-white text-xs px-4 py-2 font-bold flex items-center gap-2">
-        รีเฟรชข้อมูล
-      </button>
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500 text-white pixel-font text-[10px]">
+          <span class="w-2 h-2 rounded-full bg-white animate-ping"></span> LIVE SYNC
+        </span>
+        <button onclick="fetchData()" class="pixel-btn bg-green-500 hover:bg-green-400 text-white text-xs px-4 py-2 font-bold flex items-center gap-2">
+          รีเฟรช
+        </button>
+      </div>
     </div>
 
     <!-- Header Dashboard -->
@@ -35,33 +41,29 @@
       <h1 class="text-2xl sm:text-4xl font-black tracking-wide drop-shadow-[2px_2px_0px_#000]">
         DASHBOARD นิสิตช่วยงาน SWU OPH 2026
       </h1>
-      <p class="text-yellow-100 text-xs sm:text-sm mt-1">สรุปยอดรายงานตัวและการลงทะเบียนปฏิบัติหน้าที่</p>
+      <p class="text-yellow-100 text-xs sm:text-sm mt-1">สรุปยอดรายงานตัวและการลงทะเบียนปฏิบัติหน้าที่ (Supabase Cloud)</p>
     </div>
 
     <!-- กล่องสรุปสถิติ 4 ช่อง (KPI Cards) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      <!-- รวมนิสิตทั้งหมด -->
       <div class="pixel-box bg-[#f8fafc] p-4 text-center">
         <div class="pixel-font text-[10px] text-gray-500">TOTAL STAFF</div>
         <div id="statTotal" class="text-3xl font-black text-gray-800 mt-1">...</div>
         <div class="text-xs text-gray-500 font-bold mt-1">นิสิตช่วยงานทั้งหมด</div>
       </div>
 
-      <!-- วันที่ 13 -->
       <div class="pixel-box bg-blue-50 p-4 text-center border-blue-600">
         <div class="pixel-font text-[10px] text-blue-600">DAY 13 REGISTRATION</div>
         <div id="statDay13" class="text-3xl font-black text-blue-600 mt-1">...</div>
         <div id="pctDay13" class="text-xs text-blue-500 font-bold mt-1">0% ของทั้งหมด</div>
       </div>
 
-      <!-- วันที่ 14 -->
       <div class="pixel-box bg-purple-50 p-4 text-center border-purple-600">
         <div class="pixel-font text-[10px] text-purple-600">DAY 14 REGISTRATION</div>
         <div id="statDay14" class="text-3xl font-black text-purple-600 mt-1">...</div>
         <div id="pctDay14" class="text-xs text-purple-500 font-bold mt-1">0% ของทั้งหมด</div>
       </div>
 
-      <!-- วันที่ 15 -->
       <div class="pixel-box bg-emerald-50 p-4 text-center border-emerald-600">
         <div class="pixel-font text-[10px] text-emerald-600">DAY 15 REGISTRATION</div>
         <div id="statDay15" class="text-3xl font-black text-emerald-600 mt-1">...</div>
@@ -116,24 +118,36 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxw2j0Dm58zqoLHz3bpl50C6mrM6Jv4Ig2UPuz6ONnL35EVKunCOfAr0wTwfwduDRdd/exec';
+    // ** เชื่อมต่อ Supabase ของคุณ **
+    const SUPABASE_URL = 'https://vytedsvnzzbooedgcwch.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_n_-_qQftTU0GhJXiwYMr2w_NFiJIhHr';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let allStudents = [];
 
     async function fetchData() {
-      const tbody = document.getElementById('studentTableBody');
-      tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-gray-500 pixel-font text-xs">LOADING DATA...</td></tr>`;
-
       try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
-        allStudents = data.students || [];
+        const { data, error } = await db.from('students').select('*').order('ลำดับ', { ascending: true });
+        if (error) throw error;
+
+        allStudents = (data || []).map(s => ({
+          order: s['ลำดับ'],
+          name: s['ชื่อ-นามสกุล'],
+          studentId: String(s['รหัสนิสิต'] || '').trim(),
+          faculty: s['คณะ/วิทยาลัย'],
+          phone: s['เบอร์โทรศัพท์'],
+          role: s['ฝ่าย/ตำแหน่ง'],
+          day13: s['วันที่ 13'] || '',
+          day14: s['วันที่ 14'] || '',
+          day15: s['วันที่ 15'] || ''
+        }));
 
         updateStats();
         populateRoles();
         renderTable();
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-red-500 font-bold">ไม่สามารถดึงข้อมูลได้: ${err.message}</td></tr>`;
+        document.getElementById('studentTableBody').innerHTML = 
+          `<tr><td colspan="8" class="text-center py-8 text-red-500 font-bold">ไม่สามารถดึงข้อมูลได้: ${err.message}</td></tr>`;
       }
     }
 
@@ -193,33 +207,4 @@
         </tr>
       `).join('');
 
-      document.getElementById('showingCount').innerText = `SHOWING: ${filtered.length} / ${allStudents.length} PLAYERS`;
-    }
-
-    function renderBadge(val) {
-      if (val) {
-        return `<span class="bg-green-100 text-green-700 font-bold px-2.5 py-1 text-xs border border-green-500 inline-block shadow-sm">✓</span>`;
-      }
-      return `<span class="text-gray-300 font-bold text-xs">-</span>`;
-    }
-
-    function exportCSV() {
-      if (allStudents.length === 0) return;
-
-      let csv = "\uFEFFลำดับ,รหัสนิสิต,ชื่อ-นามสกุล,คณะ,ฝ่าย,เบอร์โทร,วันที่ 13,วันที่ 14,วันที่ 15\n";
-      allStudents.forEach(s => {
-        csv += `"${s.order}","${s.studentId}","${s.name}","${s.faculty}","${s.role}","${s.phone}","${s.day13 || '-'}","${s.day14 || '-'}","${s.day15 || '-'}"\n`;
-      });
-
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = `SWU_OPH_2026_REPORT_${new Date().toISOString().slice(0,10)}.csv`;
-      link.click();
-    }
-
-    // โหลดข้อมูลอัตโนมัติเมื่อเปิดหน้า
-    fetchData();
-  </script>
-</body>
-</html>
+      document.getElementById('showingCount').innerText = `SHOWING: ${filtered.lengt
