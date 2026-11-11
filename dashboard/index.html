@@ -25,7 +25,7 @@
         ◀ หน้าลงทะเบียน
       </a>
       <button onclick="fetchData()" class="pixel-btn bg-green-500 hover:bg-green-400 text-white text-xs px-4 py-2 font-bold flex items-center gap-2">
-        🔄 รีเฟรชข้อมูล
+        รีเฟรชข้อมูล
       </button>
     </div>
 
@@ -42,9 +42,9 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       <!-- รวมนิสิตทั้งหมด -->
       <div class="pixel-box bg-[#f8fafc] p-4 text-center">
-        <div class="pixel-font text-[10px] text-gray-500">TOTAL HELPERS</div>
+        <div class="pixel-font text-[10px] text-gray-500">TOTAL STAFF</div>
         <div id="statTotal" class="text-3xl font-black text-gray-800 mt-1">...</div>
-        <div class="text-xs text-gray-500 font-bold mt-1">นิสิตในระบบทั้งหมด</div>
+        <div class="text-xs text-gray-500 font-bold mt-1">นิสิตช่วยงานทั้งหมด</div>
       </div>
 
       <!-- วันที่ 13 -->
@@ -82,7 +82,7 @@
         </div>
 
         <button onclick="exportCSV()" class="pixel-btn bg-yellow-400 hover:bg-yellow-300 font-black text-xs px-4 py-2.5 flex items-center gap-1.5 flex-shrink-0 w-full sm:w-auto justify-center">
-          📥 EXPORT CSV
+          EXPORT CSV
         </button>
       </div>
     </div>
@@ -198,7 +198,7 @@
 
     function renderBadge(val) {
       if (val) {
-        return `<span class="bg-green-100 text-green-700 font-bold px-2.5 py-1 text-xs border border-green-500 inline-block shadow-sm">✓ แล้ว</span>`;
+        return `<span class="bg-green-100 text-green-700 font-bold px-2.5 py-1 text-xs border border-green-500 inline-block shadow-sm">✓</span>`;
       }
       return `<span class="text-gray-300 font-bold text-xs">-</span>`;
     }
