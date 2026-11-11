@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SWU OPH 2026 - QUEST REGISTRATION</title>
+  <title>SWU OPH 2026 - REGISTRATION</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Google Fonts: สไตล์เกมตู้ 8-Bit + ฟอนต์ไทยอ่านง่ายคมชัด -->
@@ -73,14 +73,14 @@
       <div class="border-b-4 border-black pb-4 mb-4">
         <div class="flex justify-between items-start">
           <div>
-            <span class="pixel-font text-[10px] bg-yellow-300 px-2 py-0.5 border-2 border-black font-bold">PLAYER INFO</span>
+            <span class="pixel-font text-[10px] bg-yellow-300 px-2 py-0.5 border-2 border-black font-bold">STUDENT INFO</span>
             <h2 id="resName" class="text-xl sm:text-2xl font-black mt-2 text-gray-900"></h2>
             <p id="resId" class="text-gray-600 font-mono text-sm font-bold"></p>
           </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mt-3 text-sm font-bold text-gray-700 bg-gray-100 p-3 border-2 border-dashed border-gray-400">
-          <p>🎓 คณะ: <span id="resFaculty" class="font-normal"></span></p>
-          <p>⚔️ ฝ่าย: <span id="resRole" class="text-red-600 font-black"></span></p>
+          <p>🎓 คณะ : <span id="resFaculty" class="font-normal"></span></p>
+          <p>⚔️ ฝ่าย : <span id="resRole" class="text-red-600 font-black"></span></p>
         </div>
       </div>
 
@@ -90,7 +90,7 @@
         <!-- Day 13 -->
         <div class="pixel-box p-3 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <div class="font-black text-gray-800 text-sm">📅 วันที่ 13</div>
+            <div class="font-black text-gray-800 text-sm">วันที่ 13 พฤศจิกายน 2569</div>
             <div id="status13" class="text-xs font-bold text-gray-500 mt-0.5">...</div>
           </div>
           <button id="btn13" onclick="confirmDay('13')" class="pixel-btn px-4 py-2 font-bold text-xs"></button>
@@ -99,7 +99,7 @@
         <!-- Day 14 -->
         <div class="pixel-box p-3 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <div class="font-black text-gray-800 text-sm">📅 วันที่ 14</div>
+            <div class="font-black text-gray-800 text-sm">วันที่ 14 พฤศจิกายน 2569</div>
             <div id="status14" class="text-xs font-bold text-gray-500 mt-0.5">...</div>
           </div>
           <button id="btn14" onclick="confirmDay('14')" class="pixel-btn px-4 py-2 font-bold text-xs"></button>
@@ -108,7 +108,7 @@
         <!-- Day 15 -->
         <div class="pixel-box p-3 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <div class="font-black text-gray-800 text-sm">📅 วันที่ 15</div>
+            <div class="font-black text-gray-800 text-sm">วันที่ 15 พฤศจิกายน 2569</div>
             <div id="status15" class="text-xs font-bold text-gray-500 mt-0.5">...</div>
           </div>
           <button id="btn15" onclick="confirmDay('15')" class="pixel-btn px-4 py-2 font-bold text-xs"></button>
@@ -135,20 +135,20 @@
         <div class="border-2 border-black p-3 bg-slate-50 space-y-2">
           <label class="flex items-center gap-2 cursor-pointer font-bold text-sm">
             <input type="checkbox" id="cfg13" class="w-5 h-5 accent-red-600">
-            <span>เปิดลงทะเบียน วันที่ 13</span>
+            <span>เปิดลงทะเบียน วันที่ 13 พ.ย. 69</span>
           </label>
           <label class="flex items-center gap-2 cursor-pointer font-bold text-sm">
             <input type="checkbox" id="cfg14" class="w-5 h-5 accent-red-600">
-            <span>เปิดลงทะเบียน วันที่ 14</span>
+            <span>เปิดลงทะเบียน วันที่ 14 พ.ย. 69</span>
           </label>
           <label class="flex items-center gap-2 cursor-pointer font-bold text-sm">
             <input type="checkbox" id="cfg15" class="w-5 h-5 accent-red-600">
-            <span>เปิดลงทะเบียน วันที่ 15</span>
+            <span>เปิดลงทะเบียน วันที่ 15 พ.ย. 69</span>
           </label>
         </div>
 
         <button onclick="saveAdminConfig()" class="pixel-btn w-full bg-purple-600 hover:bg-purple-700 text-white font-black py-2.5">
-          💾 บันทึกการตั้งค่า
+          บันทึกการตั้งค่า
         </button>
       </div>
     </div>
