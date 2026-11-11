@@ -211,11 +211,12 @@
     }
 
     function renderBadge(val) {
-      if (val) {
-        return `<span class="bg-green-100 text-green-700 font-bold px-2 py-0.5 text-xs border border-green-500 inline-block shadow-sm">✓ ${val}</span>`;
-      }
-      return `<span class="text-gray-300 font-bold text-xs">-</span>`;
-    }
+  if (val) {
+    // แสดงคำว่า 'ลงทะเบียน' และเมื่อเอาเมาส์ไปชี้จะมีเวลาลอยขึ้นมา (title)
+    return `<span title="เวลา: ${val}" class="bg-green-100 text-green-700 font-bold px-2.5 py-1 text-xs border border-green-500 inline-block shadow-sm cursor-pointer">✓ ลงทะเบียน</span>`;
+  }
+  return `<span class="text-gray-300 font-bold text-xs">-</span>`;
+}
 
     function exportCSV() {
       if (allStudents.length === 0) return;
