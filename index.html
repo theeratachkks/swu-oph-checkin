@@ -128,7 +128,7 @@
       <div class="space-y-4">
         <div>
           <label class="block text-xs font-bold mb-1">ใส่รหัสผ่าน ADMIN PIN:</label>
-          <input type="password" id="adminPin" placeholder="ค่าเริ่มต้น 1234" 
+          <input type="password" id="adminPin" placeholder="PASSWORD PIN" 
             class="pixel-box w-full px-3 py-2 text-center text-lg font-mono tracking-widest focus:outline-none bg-yellow-50">
         </div>
 
@@ -232,7 +232,7 @@
       if (!currentStudent) return;
 
       const confirm = await Swal.fire({
-        title: `ยืนยันเควสต์วันที่ ${day}?`,
+        title: `ยืนยันวันที่ ${day}?`,
         text: `คุณกำลังจะลงทะเบียนเข้าร่วม วันที่ ${day}`,
         icon: 'question',
         showCancelButton: true,
