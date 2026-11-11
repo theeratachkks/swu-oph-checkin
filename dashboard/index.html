@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DASHBOARD - SWU OPH 2026</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- นำเข้าไลบรารี Supabase -->
+  <!-- Supabase JS Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Kanit:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
@@ -30,7 +30,7 @@
           <span class="w-2 h-2 rounded-full bg-white animate-ping"></span> LIVE SYNC
         </span>
         <button onclick="fetchData()" class="pixel-btn bg-green-500 hover:bg-green-400 text-white text-xs px-4 py-2 font-bold flex items-center gap-2">
-          รีเฟรช
+          🔄 รีเฟรช
         </button>
       </div>
     </div>
@@ -47,9 +47,9 @@
     <!-- กล่องสรุปสถิติ 4 ช่อง (KPI Cards) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       <div class="pixel-box bg-[#f8fafc] p-4 text-center">
-        <div class="pixel-font text-[10px] text-gray-500">TOTAL STAFF</div>
+        <div class="pixel-font text-[10px] text-gray-500">TOTAL HELPERS</div>
         <div id="statTotal" class="text-3xl font-black text-gray-800 mt-1">...</div>
-        <div class="text-xs text-gray-500 font-bold mt-1">นิสิตช่วยงานทั้งหมด</div>
+        <div class="text-xs text-gray-500 font-bold mt-1">นิสิตในระบบทั้งหมด</div>
       </div>
 
       <div class="pixel-box bg-blue-50 p-4 text-center border-blue-600">
@@ -84,7 +84,7 @@
         </div>
 
         <button onclick="exportCSV()" class="pixel-btn bg-yellow-400 hover:bg-yellow-300 font-black text-xs px-4 py-2.5 flex items-center gap-1.5 flex-shrink-0 w-full sm:w-auto justify-center">
-          EXPORT CSV
+          📥 EXPORT CSV
         </button>
       </div>
     </div>
@@ -99,112 +99,4 @@
             <th class="p-3">ชื่อ-นามสกุล</th>
             <th class="p-3">คณะ</th>
             <th class="p-3">ฝ่าย</th>
-            <th class="p-3 text-center">วันที่ 13</th>
-            <th class="p-3 text-center">วันที่ 14</th>
-            <th class="p-3 text-center">วันที่ 15</th>
-          </tr>
-        </thead>
-        <tbody id="studentTableBody" class="divide-y-2 divide-gray-200">
-          <tr>
-            <td colspan="8" class="text-center py-8 text-gray-500 pixel-font text-xs">LOADING DATA...</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="text-right text-gray-400 text-xs mt-3 pixel-font" id="showingCount">
-      SHOWING: 0 PLAYERS
-    </div>
-  </div>
-
-  <script>
-    // ** เชื่อมต่อ Supabase ของคุณ **
-    const SUPABASE_URL = 'https://vytedsvnzzbooedgcwch.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_n_-_qQftTU0GhJXiwYMr2w_NFiJIhHr';
-    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    let allStudents = [];
-
-    async function fetchData() {
-      try {
-        const { data, error } = await db.from('students').select('*').order('ลำดับ', { ascending: true });
-        if (error) throw error;
-
-        allStudents = (data || []).map(s => ({
-          order: s['ลำดับ'],
-          name: s['ชื่อ-นามสกุล'],
-          studentId: String(s['รหัสนิสิต'] || '').trim(),
-          faculty: s['คณะ/วิทยาลัย'],
-          phone: s['เบอร์โทรศัพท์'],
-          role: s['ฝ่าย/ตำแหน่ง'],
-          day13: s['วันที่ 13'] || '',
-          day14: s['วันที่ 14'] || '',
-          day15: s['วันที่ 15'] || ''
-        }));
-
-        updateStats();
-        populateRoles();
-        renderTable();
-      } catch (err) {
-        document.getElementById('studentTableBody').innerHTML = 
-          `<tr><td colspan="8" class="text-center py-8 text-red-500 font-bold">ไม่สามารถดึงข้อมูลได้: ${err.message}</td></tr>`;
-      }
-    }
-
-    function updateStats() {
-      const total = allStudents.length;
-      const d13 = allStudents.filter(s => s.day13).length;
-      const d14 = allStudents.filter(s => s.day14).length;
-      const d15 = allStudents.filter(s => s.day15).length;
-
-      document.getElementById('statTotal').innerText = total.toLocaleString();
-      document.getElementById('statDay13').innerText = d13.toLocaleString();
-      document.getElementById('statDay14').innerText = d14.toLocaleString();
-      document.getElementById('statDay15').innerText = d15.toLocaleString();
-
-      document.getElementById('pctDay13').innerText = `${Math.round((d13/total)*100 || 0)}% ของทั้งหมด`;
-      document.getElementById('pctDay14').innerText = `${Math.round((d14/total)*100 || 0)}% ของทั้งหมด`;
-      document.getElementById('pctDay15').innerText = `${Math.round((d15/total)*100 || 0)}% ของทั้งหมด`;
-    }
-
-    function populateRoles() {
-      const roleSelect = document.getElementById('filterRole');
-      const roles = [...new Set(allStudents.map(s => s.role).filter(Boolean))];
-      
-      roleSelect.innerHTML = `<option value="ALL">-- ทุกฝ่าย/ตำแหน่ง (${roles.length}) --</option>`;
-      roles.forEach(role => {
-        roleSelect.innerHTML += `<option value="${role}">${role}</option>`;
-      });
-    }
-
-    function renderTable() {
-      const query = document.getElementById('filterSearch').value.toLowerCase().trim();
-      const selectedRole = document.getElementById('filterRole').value;
-
-      const filtered = allStudents.filter(s => {
-        const matchQuery = s.studentId.includes(query) || s.name.toLowerCase().includes(query);
-        const matchRole = (selectedRole === 'ALL') || (s.role === selectedRole);
-        return matchQuery && matchRole;
-      });
-
-      const tbody = document.getElementById('studentTableBody');
-      if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-gray-500 font-bold">ไม่พบข้อมูลที่ค้นหา</td></tr>`;
-        document.getElementById('showingCount').innerText = `SHOWING: 0 PLAYERS`;
-        return;
-      }
-
-      tbody.innerHTML = filtered.map(s => `
-        <tr class="hover:bg-yellow-50 transition">
-          <td class="p-3 font-mono text-gray-500">${s.order}</td>
-          <td class="p-3 font-bold font-mono text-indigo-700">${s.studentId}</td>
-          <td class="p-3 font-bold text-gray-900">${s.name}</td>
-          <td class="p-3 text-xs text-gray-600">${s.faculty}</td>
-          <td class="p-3 text-xs font-bold text-red-600">${s.role}</td>
-          <td class="p-3 text-center">${renderBadge(s.day13)}</td>
-          <td class="p-3 text-center">${renderBadge(s.day14)}</td>
-          <td class="p-3 text-center">${renderBadge(s.day15)}</td>
-        </tr>
-      `).join('');
-
-      document.getElementById('showingCount').innerText = `SHOWING: ${filtered.lengt
+            <th class="p-3 text-center">วันที่ 13<
