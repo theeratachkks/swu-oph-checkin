@@ -30,7 +30,7 @@
           <span class="w-2 h-2 rounded-full bg-white animate-ping"></span> LIVE SYNC
         </span>
         <button onclick="fetchData()" class="pixel-btn bg-green-500 hover:bg-green-400 text-white text-xs px-4 py-2 font-bold flex items-center gap-2">
-          🔄 รีเฟรช
+          รีเฟรช
         </button>
       </div>
     </div>
@@ -84,7 +84,7 @@
         </div>
 
         <button onclick="exportCSV()" class="pixel-btn bg-yellow-400 hover:bg-yellow-300 font-black text-xs px-4 py-2.5 flex items-center gap-1.5 flex-shrink-0 w-full sm:w-auto justify-center">
-          📥 EXPORT CSV
+          EXPORT CSV
         </button>
       </div>
     </div>
@@ -213,7 +213,7 @@
     function renderBadge(val) {
   if (val) {
     // แสดงคำว่า 'ลงทะเบียน' และเมื่อเอาเมาส์ไปชี้จะมีเวลาลอยขึ้นมา (title)
-    return `<span title="เวลา: ${val}" class="bg-green-100 text-green-700 font-bold px-2.5 py-1 text-xs border border-green-500 inline-block shadow-sm cursor-pointer">✓ ลงทะเบียน</span>`;
+    return `<span title="เวลา: ${val}" class="bg-green-100 text-green-700 font-bold px-2.5 py-1 text-xs border border-green-500 inline-block shadow-sm cursor-pointer">✓</span>`;
   }
   return `<span class="text-gray-300 font-bold text-xs">-</span>`;
 }
