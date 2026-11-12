@@ -17,7 +17,7 @@
     }
     .pixel-btn { border: 2px solid #000; box-shadow: 3px 3px 0px #000; transition: all 0.05s; }
     @media (min-width: 640px) {
-      .pixel-btn { border: 3px solid #000; box-shadow: 3px 3px 0px #000; }
+      .pixel-btn { border: 3px solid #000; box-shadow: 4px 4px 0px #000; }
     }
     .pixel-btn:hover { transform: translate(1px, 1px); box-shadow: 2px 2px 0px #000; }
     .pixel-btn:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px #000; }
@@ -32,8 +32,8 @@
         ◀ หน้าลงทะเบียน
       </a>
       <div class="flex items-center gap-2">
-        <span class="inline-flex items-center gap-1 px-2 py-1 bg-emerald-500 text-white pixel-font text-[9px] sm:text-[10px]">
-          <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span> LIVE
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500 text-white pixel-font text-[9px] sm:text-[10px]">
+          <span class="w-2 h-2 rounded-full bg-white animate-ping"></span> REAL-TIME LIVE
         </span>
         <button onclick="fetchData()" class="pixel-btn bg-green-500 hover:bg-green-400 text-white text-[10px] sm:text-xs px-3 py-1.5 font-bold flex items-center gap-1">
           🔄 รีเฟรช
@@ -100,7 +100,7 @@
       👉 ปัดซ้าย-ขวา เพื่อดูข้อมูลและวันที่ ➔
     </div>
 
-    <!-- ตารางรายชื่อนิสิต (ใส่ min-w เพื่อไม่ให้บีบอัดตัวหนังสือ) -->
+    <!-- ตารางรายชื่อนิสิต -->
     <div class="pixel-box bg-white overflow-x-auto p-1 sm:p-3">
       <table class="w-full text-left border-collapse text-xs sm:text-sm min-w-[850px]">
         <thead>
@@ -204,7 +204,6 @@
         return;
       }
 
-      // แสดงผลแถวแบบ whitespace-nowrap ป้องกันการตัดคำมั่ว
       tbody.innerHTML = filtered.map(s => `
         <tr class="hover:bg-yellow-50 transition border-b border-gray-100">
           <td class="p-2.5 sm:p-3 font-mono text-gray-500 text-center whitespace-nowrap">${s.order}</td>
@@ -221,7 +220,6 @@
       document.getElementById('showingCount').innerText = `SHOWING: ${filtered.length} / ${allStudents.length} PLAYERS`;
     }
 
-    // ป้ายแสดงคำว่า "✓ ลงทะเบียน" พร้อม Tooltip แสดงเวลาเมื่อชี้เมาส์
     function renderBadge(val) {
       if (val) {
         return `<span title="เวลาที่ลง: ${val}" class="bg-green-100 text-green-700 font-bold px-2.5 py-1 text-xs border border-green-500 inline-block shadow-sm cursor-pointer whitespace-nowrap">✓ ลงทะเบียน</span>`;
@@ -229,12 +227,21 @@
       return `<span class="text-gray-300 font-bold text-xs">-</span>`;
     }
 
+    // ⭐ ระบบ Export CSV: แสดงคำว่า 'ลงทะเบียน' และซ่อนเวลาไว้ 3 คอลัมน์ด้านหลังสุด
     function exportCSV() {
       if (allStudents.length === 0) return;
 
-      let csv = "\uFEFFลำดับ,รหัสนิสิต,ชื่อ-นามสกุล,คณะ,ฝ่าย,เบอร์โทร,วันที่ 13,วันที่ 14,วันที่ 15\n";
+      let csv = "\uFEFFลำดับ,รหัสนิสิต,ชื่อ-นามสกุล,คณะ,ฝ่าย,เบอร์โทร,วันที่ 13,วันที่ 14,วันที่ 15,เวลาลงทะเบียน_วันที่13,เวลาลงทะเบียน_วันที่14,เวลาลงทะเบียน_วันที่15\n";
+
       allStudents.forEach(s => {
-        csv += `"${s.order}","${s.studentId}","${s.name}","${s.faculty}","${s.role}","${s.phone}","${s.day13 || '-'}","${s.day14 || '-'}","${s.day15 || '-'}"\n`;
+        const status13 = s.day13 ? "ลงทะเบียน" : "-";
+        const status14 = s.day14 ? "ลงทะเบียน" : "-";
+        const status15 = s.day15 ? "ลงทะเบียน" : "-";
+        const time13 = s.day13 || "-";
+        const time14 = s.day14 || "-";
+        const time15 = s.day15 || "-";
+
+        csv += `"${s.order}","${s.studentId}","${s.name}","${s.faculty}","${s.role}","${s.phone}","${status13}","${status14}","${status15}","${time13}","${time14}","${time15}"\n`;
       });
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -244,10 +251,10 @@
       link.click();
     }
 
-    // Real-time listener
-    db.channel('students-realtime')
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'students' }, payload => {
-        fetchData();
+    // ⭐ ดักจับสัญญาณ Real-time ทุกความเคลื่อนไหว (INSERT, UPDATE, DELETE)
+    db.channel('public:students')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'students' }, (payload) => {
+        fetchData(); // อัปเดตข้อมูลบนหน้าจอทันที!
       })
       .subscribe();
 
