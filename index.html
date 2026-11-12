@@ -132,8 +132,8 @@
     </div>
   </div>
 
-  <!-- Modal Admin (แบบคลีน เรียบง่าย ติ๊กเปิด-ปิดทันที) -->
-  <div id="adminModal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+  <!-- Modal Admin (ใช้ style="display: none;" ชัวร์ 100% ไม่บังจอ) -->
+  <div id="adminModal" style="display: none;" class="fixed inset-0 bg-black/75 backdrop-blur-sm items-center justify-center p-4 z-50">
     <div class="pixel-box bg-white max-w-sm w-full p-5 sm:p-6">
       <div class="flex justify-between items-center border-b-4 border-black pb-2 mb-4">
         <h3 class="pixel-font text-xs sm:text-sm font-bold text-purple-700">👾 ADMIN SETTINGS</h3>
@@ -236,7 +236,6 @@
       }
     }
 
-    // แสดงสถานะตามการติ๊กของแอดมินโดยตรง (ไม่ต้องเทียบเวลาให้ยุ่งยาก)
     function renderDayStatus(day, timeValue) {
       const statusEl = document.getElementById(`status${day}`);
       const btn = document.getElementById(`btn${day}`);
@@ -246,99 +245,4 @@
         statusEl.innerHTML = `<span class="text-green-600 font-bold">★ ลงทะเบียนแล้ว</span> (${timeValue})`;
         btn.disabled = true;
         btn.innerText = 'CLEARED ✔';
-        btn.className = 'pixel-btn px-3.5 py-1.5 sm:px-4 sm:py-2 bg-gray-200 text-gray-500 cursor-not-allowed border-gray-400 text-xs';
-      } else if (!isOpen) {
-        statusEl.innerHTML = `<span class="text-red-500 font-bold">🔒 ปิดรับลงทะเบียน</span>`;
-        btn.disabled = true;
-        btn.innerText = 'LOCKED ✕';
-        btn.className = 'pixel-btn px-3.5 py-1.5 sm:px-4 sm:py-2 bg-gray-200 text-gray-400 cursor-not-allowed border-gray-300 text-xs';
-      } else {
-        statusEl.innerHTML = `<span class="text-blue-600 font-bold">⚡ พร้อมลงทะเบียน</span>`;
-        btn.disabled = false;
-        btn.innerText = `ลงทะเบียนวันที่ ${day} ▶`;
-        btn.className = 'pixel-btn px-3.5 py-1.5 sm:px-4 sm:py-2 bg-[#fcc419] hover:bg-[#fab005] text-black font-black text-xs';
-      }
-    }
-
-    async function confirmDay(day) {
-      if (!currentStudent) return;
-
-      const isOpen = configData[`day${day}`] === 'true';
-      if (!isOpen) {
-        Swal.fire('ปิดระบบ', 'ระบบปิดรับลงทะเบียนในวันนี้แล้ว', 'warning');
-        return;
-      }
-
-      const confirm = await Swal.fire({
-        title: `ยืนยันวันที่ ${day}?`,
-        text: `คุณกำลังจะลงทะเบียนเข้าร่วม วันที่ ${day}`,
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'ยืนยันลงทะเบียน',
-        cancelButtonText: 'ยกเลิก',
-        confirmButtonColor: '#2b8a3e',
-        cancelButtonColor: '#e03131'
-      });
-
-      if (!confirm.isConfirmed) return;
-
-      const btn = document.getElementById(`btn${day}`);
-      btn.disabled = true;
-      btn.innerText = 'SAVING...';
-
-      const nowStr = new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' });
-      const fieldName = `day${day}`;
-
-      try {
-        const { error } = await db.from('students')
-          .update({ [fieldName]: nowStr })
-          .eq('student_id', currentStudent.studentId);
-
-        if (error) throw error;
-
-        Swal.fire({
-          icon: 'success',
-          title: 'MISSION COMPLETE!',
-          text: `ลงทะเบียนวันที่ ${day} เรียบร้อยแล้ว`,
-          confirmButtonColor: '#000'
-        });
-
-        currentStudent[`day${day}`] = nowStr;
-        renderDayStatus(day, nowStr);
-
-      } catch (err) {
-        Swal.fire('ERROR', err.message, 'error');
-        renderDayStatus(day, currentStudent[`day${day}`]);
-      }
-    }
-
-    // ล็อกรหัสผ่าน Admin PIN: 210249 ก่อนเปิดหน้าต่างตั้งค่า
-    async function openAdminModal() {
-      const { value: pin } = await Swal.fire({
-        title: '🔐 ADMIN LOGIN',
-        text: 'กรุณากรอกรหัสผ่านเพื่อเข้าสู่การตั้งค่า',
-        input: 'password',
-        inputPlaceholder: 'ใส่รหัส PIN',
-        showCancelButton: true,
-        confirmButtonText: 'เข้าสู่ระบบ',
-        cancelButtonText: 'ยกเลิก',
-        confirmButtonColor: '#7c3aed',
-        cancelButtonColor: '#000'
-      });
-
-      if (!pin) return;
-
-      if (pin !== '210249') {
-        Swal.fire({
-          icon: 'error',
-          title: 'ACCESS DENIED',
-          text: 'รหัสผ่าน Admin ไม่ถูกต้อง!',
-          confirmButtonColor: '#000'
-        });
-        return;
-      }
-
-      // ติ๊กช่องตามสถานะจริงที่มีอยู่ในฐานข้อมูล
-      document.getElementById('cfg13').checked = (configData.day13 === 'true');
-      document.getElementById('cfg14').checked = (configData.day14 === 'true');
-      document.getElementById('cfg15').checked = (configData.day15 ===
+        btn.className = 'pixel-btn px-3.5
