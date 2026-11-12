@@ -47,7 +47,7 @@
       <h1 class="text-xl sm:text-3xl font-black tracking-normal drop-shadow-[2px_2px_0px_#000]">
         DASHBOARD นิสิตช่วยงาน SWU OPH 2026
       </h1>
-      <p class="text-yellow-100 text-xs sm:text-sm mt-0.5">สรุปยอดรายงานตัวและการลงทะเบียนปฏิบัติหน้าที่</p>
+      <p class="text-yellow-100 text-xs sm:text-sm mt-0.5">สรุปยอดรายงานตัวและการลงทะเบียนปฏิบัติหน้าที่ (Supabase Cloud)</p>
     </div>
 
     <!-- กล่องสรุปสถิติ 4 ช่อง (KPI Cards) -->
@@ -100,19 +100,19 @@
       👉 ปัดซ้าย-ขวา เพื่อดูข้อมูลและวันที่ ➔
     </div>
 
-    <!-- ตารางรายชื่อนิสิต -->
+    <!-- ตารางรายชื่อนิสิต (จัดสัดส่วนใหม่ให้โชว์ครบทั้ง 3 วัน) -->
     <div class="pixel-box bg-white overflow-x-auto p-1 sm:p-3">
-      <table class="w-full text-left border-collapse text-xs sm:text-sm min-w-[850px]">
+      <table class="w-full text-left border-collapse text-xs sm:text-sm">
         <thead>
           <tr class="bg-gray-100 border-b-2 sm:border-b-4 border-black uppercase pixel-font text-[10px] sm:text-xs text-gray-700">
-            <th class="p-2.5 sm:p-3 text-center w-14 whitespace-nowrap">ลำดับ</th>
-            <th class="p-2.5 sm:p-3 whitespace-nowrap w-36">รหัสนิสิต</th>
-            <th class="p-2.5 sm:p-3 whitespace-nowrap">ชื่อ-นามสกุล</th>
-            <th class="p-2.5 sm:p-3 whitespace-nowrap">คณะ</th>
-            <th class="p-2.5 sm:p-3 whitespace-nowrap">ฝ่าย/ตำแหน่ง</th>
-            <th class="p-2.5 sm:p-3 text-center whitespace-nowrap w-28">วันที่ 13</th>
-            <th class="p-2.5 sm:p-3 text-center whitespace-nowrap w-28">วันที่ 14</th>
-            <th class="p-2.5 sm:p-3 text-center whitespace-nowrap w-28">วันที่ 15</th>
+            <th class="p-2 sm:p-3 text-center w-12 whitespace-nowrap">ลำดับ</th>
+            <th class="p-2 sm:p-3 whitespace-nowrap w-28 sm:w-32">รหัสนิสิต</th>
+            <th class="p-2 sm:p-3 whitespace-nowrap min-w-[140px]">ชื่อ-นามสกุล</th>
+            <th class="p-2 sm:p-3 max-w-[180px] sm:max-w-[220px]">คณะ/วิทยาลัย</th>
+            <th class="p-2 sm:p-3 max-w-[140px] sm:max-w-[180px]">ฝ่าย/ตำแหน่ง</th>
+            <th class="p-2 sm:p-3 text-center w-24 sm:w-28 whitespace-nowrap">วันที่ 13</th>
+            <th class="p-2 sm:p-3 text-center w-24 sm:w-28 whitespace-nowrap">วันที่ 14</th>
+            <th class="p-2 sm:p-3 text-center w-24 sm:w-28 whitespace-nowrap">วันที่ 15</th>
           </tr>
         </thead>
         <tbody id="studentTableBody" class="divide-y divide-gray-200">
@@ -181,9 +181,11 @@
       const roleSelect = document.getElementById('filterRole');
       const roles = [...new Set(allStudents.map(s => s.role).filter(Boolean))];
       
+      const currentSelected = roleSelect.value;
       roleSelect.innerHTML = `<option value="ALL">-- ทุกฝ่าย/ตำแหน่ง (${roles.length}) --</option>`;
       roles.forEach(role => {
-        roleSelect.innerHTML += `<option value="${role}">${role}</option>`;
+        const isSelected = (role === currentSelected) ? 'selected' : '';
+        roleSelect.innerHTML += `<option value="${role}" ${isSelected}>${role}</option>`;
       });
     }
 
@@ -204,16 +206,17 @@
         return;
       }
 
+      // ปรับการจัดวางช่องคณะและฝ่าย ให้ย่อตัดบรรทัดได้ ไม่ดึงตารางให้ยาวเกินจอ
       tbody.innerHTML = filtered.map(s => `
         <tr class="hover:bg-yellow-50 transition border-b border-gray-100">
-          <td class="p-2.5 sm:p-3 font-mono text-gray-500 text-center whitespace-nowrap">${s.order}</td>
-          <td class="p-2.5 sm:p-3 font-bold font-mono text-indigo-700 whitespace-nowrap">${s.studentId}</td>
-          <td class="p-2.5 sm:p-3 font-bold text-gray-900 whitespace-nowrap">${s.name}</td>
-          <td class="p-2.5 sm:p-3 text-gray-600 whitespace-nowrap">${s.faculty}</td>
-          <td class="p-2.5 sm:p-3 font-bold text-red-600 whitespace-nowrap">${s.role}</td>
-          <td class="p-2.5 sm:p-3 text-center whitespace-nowrap">${renderBadge(s.day13)}</td>
-          <td class="p-2.5 sm:p-3 text-center whitespace-nowrap">${renderBadge(s.day14)}</td>
-          <td class="p-2.5 sm:p-3 text-center whitespace-nowrap">${renderBadge(s.day15)}</td>
+          <td class="p-2 sm:p-3 font-mono text-gray-500 text-center whitespace-nowrap">${s.order}</td>
+          <td class="p-2 sm:p-3 font-bold font-mono text-indigo-700 whitespace-nowrap">${s.studentId}</td>
+          <td class="p-2 sm:p-3 font-bold text-gray-900 whitespace-nowrap">${s.name}</td>
+          <td class="p-2 sm:p-3 text-[11px] sm:text-xs text-gray-600 leading-tight max-w-[180px] sm:max-w-[220px]">${s.faculty}</td>
+          <td class="p-2 sm:p-3 text-[11px] sm:text-xs font-bold text-red-600 leading-tight max-w-[140px] sm:max-w-[180px]">${s.role}</td>
+          <td class="p-2 sm:p-3 text-center whitespace-nowrap">${renderBadge(s.day13)}</td>
+          <td class="p-2 sm:p-3 text-center whitespace-nowrap">${renderBadge(s.day14)}</td>
+          <td class="p-2 sm:p-3 text-center whitespace-nowrap">${renderBadge(s.day15)}</td>
         </tr>
       `).join('');
 
@@ -222,12 +225,11 @@
 
     function renderBadge(val) {
       if (val) {
-        return `<span title="เวลาที่ลง: ${val}" class="bg-green-100 text-green-700 font-bold px-2.5 py-1 text-xs border border-green-500 inline-block shadow-sm cursor-pointer whitespace-nowrap">✓ ลงทะเบียน</span>`;
+        return `<span title="เวลาที่ลง: ${val}" class="bg-green-100 text-green-700 font-bold px-2 py-0.5 text-xs border border-green-500 inline-block shadow-sm cursor-pointer whitespace-nowrap">✓ ลงทะเบียน</span>`;
       }
       return `<span class="text-gray-300 font-bold text-xs">-</span>`;
     }
 
-    // ⭐ ระบบ Export CSV: แสดงคำว่า 'ลงทะเบียน' และซ่อนเวลาไว้ 3 คอลัมน์ด้านหลังสุด
     function exportCSV() {
       if (allStudents.length === 0) return;
 
@@ -245,20 +247,4 @@
       });
 
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = `SWU_OPH_2026_REPORT_${new Date().toISOString().slice(0,10)}.csv`;
-      link.click();
-    }
-
-    // ⭐ ดักจับสัญญาณ Real-time ทุกความเคลื่อนไหว (INSERT, UPDATE, DELETE)
-    db.channel('public:students')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'students' }, (payload) => {
-        fetchData(); // อัปเดตข้อมูลบนหน้าจอทันที!
-      })
-      .subscribe();
-
-    fetchData();
-  </script>
-</body>
-</html>
+      const link = document.createElement("a"
