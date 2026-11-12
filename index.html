@@ -17,7 +17,7 @@
     }
     .pixel-font { font-family: 'Press Start 2P', monospace; }
     
-    /* สไตล์เงาเหลี่ยมแบบ Pixel Art ปรับขนาดตามหน้าจอ */
+    /* สไตล์เงาเหลี่ยมแบบ Pixel Art */
     .pixel-box {
       border: 3px solid #000;
       box-shadow: 3px 3px 0px #000;
@@ -54,7 +54,7 @@
   <!-- แถบด้านบน: ปุ่ม Admin Panel -->
   <div class="max-w-2xl mx-auto flex justify-end mb-2.5">
     <button onclick="openAdminModal()" class="pixel-btn bg-purple-600 hover:bg-purple-500 text-white px-2.5 py-1 text-xs pixel-font flex items-center gap-1.5 rounded-none">
-      [ADMIN]
+      🔒 [ADMIN]
     </button>
   </div>
 
@@ -132,57 +132,82 @@
     </div>
   </div>
 
-  <!-- Modal Admin -->
+  <!-- Modal Admin (พร้อมระบบตั้งเวลา) -->
   <div id="adminModal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-    <div class="pixel-box bg-white max-w-sm w-full p-5 sm:p-6">
+    <div class="pixel-box bg-white max-w-md w-full p-5 sm:p-6 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b-4 border-black pb-2 mb-4">
-        <h3 class="pixel-font text-xs sm:text-sm font-bold text-purple-700">ADMIN PANEL</h3>
+        <h3 class="pixel-font text-xs sm:text-sm font-bold text-purple-700">👾 ADMIN SETTINGS</h3>
         <button onclick="closeAdminModal()" class="font-black text-lg">✕</button>
       </div>
 
       <div class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold mb-1">ใส่รหัสผ่าน ADMIN PIN:</label>
-          <input type="password" id="adminPin" placeholder="PASSWORD PIN" 
-            class="pixel-box w-full px-3 py-2 text-center text-lg font-mono tracking-widest focus:outline-none bg-yellow-50">
+        <p class="text-xs text-gray-500 font-bold">⏰ กำหนดวันและเวลาเปิด-ปิดรับลงทะเบียนอัตโนมัติ:</p>
+
+        <!-- วันที่ 13 -->
+        <div class="border-2 border-black p-3 bg-slate-50">
+          <label class="flex items-center gap-2 cursor-pointer font-bold text-xs sm:text-sm text-red-600 mb-2">
+            <input type="checkbox" id="cfg13" class="w-5 h-5 accent-red-600">
+            <span>เปิดระบบ วันที่ 13 พ.ย. 69</span>
+          </label>
+          <div class="flex items-center gap-2 text-xs font-bold text-gray-700">
+            <span>เวลา:</span>
+            <input type="time" id="time13_start" class="pixel-box px-2 py-1 bg-white">
+            <span>ถึง</span>
+            <input type="time" id="time13_end" class="pixel-box px-2 py-1 bg-white">
+          </div>
         </div>
 
-        <div class="border-2 border-black p-3 bg-slate-50 space-y-2">
-          <label class="flex items-center gap-2 cursor-pointer font-bold text-xs sm:text-sm">
-            <input type="checkbox" id="cfg13" class="w-5 h-5 accent-red-600">
-            <span>เปิดลงทะเบียน วันที่ 13 พ.ย. 69</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer font-bold text-xs sm:text-sm">
+        <!-- วันที่ 14 -->
+        <div class="border-2 border-black p-3 bg-slate-50">
+          <label class="flex items-center gap-2 cursor-pointer font-bold text-xs sm:text-sm text-red-600 mb-2">
             <input type="checkbox" id="cfg14" class="w-5 h-5 accent-red-600">
-            <span>เปิดลงทะเบียน วันที่ 14 พ.ย. 69</span>
+            <span>เปิดระบบ วันที่ 14 พ.ย. 69</span>
           </label>
-          <label class="flex items-center gap-2 cursor-pointer font-bold text-xs sm:text-sm">
+          <div class="flex items-center gap-2 text-xs font-bold text-gray-700">
+            <span>เวลา:</span>
+            <input type="time" id="time14_start" class="pixel-box px-2 py-1 bg-white">
+            <span>ถึง</span>
+            <input type="time" id="time14_end" class="pixel-box px-2 py-1 bg-white">
+          </div>
+        </div>
+
+        <!-- วันที่ 15 -->
+        <div class="border-2 border-black p-3 bg-slate-50">
+          <label class="flex items-center gap-2 cursor-pointer font-bold text-xs sm:text-sm text-red-600 mb-2">
             <input type="checkbox" id="cfg15" class="w-5 h-5 accent-red-600">
-            <span>เปิดลงทะเบียน วันที่ 15 พ.ย. 69</span>
+            <span>เปิดระบบ วันที่ 15 พ.ย. 69</span>
           </label>
+          <div class="flex items-center gap-2 text-xs font-bold text-gray-700">
+            <span>เวลา:</span>
+            <input type="time" id="time15_start" class="pixel-box px-2 py-1 bg-white">
+            <span>ถึง</span>
+            <input type="time" id="time15_end" class="pixel-box px-2 py-1 bg-white">
+          </div>
         </div>
 
         <button onclick="saveAdminConfig()" class="pixel-btn w-full bg-purple-600 hover:bg-purple-700 text-white font-black py-2.5 text-xs sm:text-sm">
-          บันทึกการตั้งค่า
+          💾 บันทึกการตั้งค่า
         </button>
       </div>
     </div>
   </div>
 
   <script>
-    // ** เชื่อมต่อ Supabase โดยตรง **
     const SUPABASE_URL = 'https://vytedsvnzzbooedgcwch.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_n_-_qQftTU0GhJXiwYMr2w_NFiJIhHr';
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let studentsData = [];
-    let configData = { day13: true, day14: false, day15: false };
+    let configData = { 
+      day13: 'true', time13_start: '07:00', time13_end: '18:00',
+      day14: 'false', time14_start: '07:00', time14_end: '18:00',
+      day15: 'false', time15_start: '07:00', time15_end: '18:00'
+    };
     let currentStudent = null;
 
     async function loadData() {
       document.getElementById('loader').classList.remove('hidden');
       try {
-        // 1. ดึงข้อมูล 704 คนจาก Supabase
         const { data: students, error: sErr } = await db.from('students').select('*');
         if (sErr) throw sErr;
 
@@ -199,10 +224,9 @@
           day15: s.day15 || ''
         }));
 
-        // 2. ดึงการตั้งค่าเปิด-ปิดวัน
         const { data: configs, error: cErr } = await db.from('config').select('*');
         if (configs) {
-          configs.forEach(c => { configData[c.key] = c.value; });
+          configs.forEach(c => { configData[c.key] = String(c.value); });
         }
       } catch (err) {
         console.error("โหลดข้อมูลล้มเหลว", err);
@@ -212,150 +236,21 @@
     }
     loadData();
 
+    // ฟังก์ชันตรวจสอบเวลาเปิด-ปิดอัตโนมัติ
+    function checkDayStatus(day) {
+      const isEnabled = configData[`day${day}`] === 'true';
+      if (!isEnabled) return { isOpen: false, reason: 'ปิดรับลงทะเบียน' };
+
+      const startTime = configData[`time${day}_start`] || '00:00';
+      const endTime = configData[`time${day}_end`] || '23:59';
+
+      const now = new Date();
+      const currentHM = now.toTimeString().slice(0, 5); // "HH:MM"
+
+      if (currentHM < startTime || currentHM > endTime) {
+        return { isOpen: false, reason: `เปิดเวลา ${startTime} - ${endTime}` };
+      }
+      return { isOpen: true, reason: 'พร้อมลงทะเบียน' };
+    }
+
     function searchStudent() {
-      const q = document.getElementById('searchInput').value.trim();
-      const card = document.getElementById('resultCard');
-      if (!q) return;
-
-      currentStudent = studentsData.find(s => s.studentId === q || s.name.includes(q));
-
-      if (currentStudent) {
-        document.getElementById('resName').innerText = currentStudent.name;
-        document.getElementById('resId').innerText = `STUDENT ID : ${currentStudent.studentId}`;
-        document.getElementById('resFaculty').innerText = currentStudent.faculty;
-        document.getElementById('resRole').innerText = currentStudent.role;
-
-        renderDayStatus('13', currentStudent.day13, configData.day13);
-        renderDayStatus('14', currentStudent.day14, configData.day14);
-        renderDayStatus('15', currentStudent.day15, configData.day15);
-
-        card.classList.remove('hidden');
-      } else {
-        card.classList.add('hidden');
-        Swal.fire({
-          icon: 'error',
-          title: 'GAME OVER',
-          text: 'ไม่พบรายชื่อนิสิตในระบบ SWU OPH 2026',
-          confirmButtonColor: '#000'
-        });
-      }
-    }
-
-    function renderDayStatus(day, timeValue, isOpen) {
-      const statusEl = document.getElementById(`status${day}`);
-      const btn = document.getElementById(`btn${day}`);
-
-      if (timeValue) {
-        statusEl.innerHTML = `<span class="text-green-600 font-bold">★ ลงทะเบียนแล้ว</span> (${timeValue})`;
-        btn.disabled = true;
-        btn.innerText = 'CLEARED ✔';
-        btn.className = 'pixel-btn px-3.5 py-1.5 sm:px-4 sm:py-2 bg-gray-200 text-gray-500 cursor-not-allowed border-gray-400 text-xs';
-      } else if (!isOpen) {
-        statusEl.innerHTML = `<span class="text-red-500 font-bold">ปิดรับลงทะเบียน</span>`;
-        btn.disabled = true;
-        btn.innerText = 'LOCKED ✕';
-        btn.className = 'pixel-btn px-3.5 py-1.5 sm:px-4 sm:py-2 bg-gray-200 text-gray-400 cursor-not-allowed border-gray-300 text-xs';
-      } else {
-        statusEl.innerHTML = `<span class="text-blue-600 font-bold">พร้อมลงทะเบียน</span>`;
-        btn.disabled = false;
-        btn.innerText = `ลงทะเบียนวันที่ ${day} ▶`;
-        btn.className = 'pixel-btn px-3.5 py-1.5 sm:px-4 sm:py-2 bg-[#fcc419] hover:bg-[#fab005] text-black font-black text-xs';
-      }
-    }
-
-    async function confirmDay(day) {
-      if (!currentStudent) return;
-
-      const confirm = await Swal.fire({
-        title: `ยืนยันวันที่ ${day}?`,
-        text: `คุณกำลังจะลงทะเบียนเข้าร่วม วันที่ ${day}`,
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'ยืนยันลงทะเบียน',
-        cancelButtonText: 'ยกเลิก',
-        confirmButtonColor: '#2b8a3e',
-        cancelButtonColor: '#e03131'
-      });
-
-      if (!confirm.isConfirmed) return;
-
-      const btn = document.getElementById(`btn${day}`);
-      btn.disabled = true;
-      btn.innerText = 'SAVING...';
-
-      const nowStr = new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' });
-      const fieldName = `day${day}`;
-
-      try {
-        // อัปเดตไปยัง Supabase โดยค้นหาผ่าน student_id
-        const { error } = await db.from('students')
-          .update({ [fieldName]: nowStr })
-          .eq('student_id', currentStudent.studentId);
-
-        if (error) throw error;
-
-        Swal.fire({
-          icon: 'success',
-          title: 'MISSION COMPLETE!',
-          text: `ลงทะเบียนวันที่ ${day} เรียบร้อยแล้ว`,
-          confirmButtonColor: '#000'
-        });
-
-        currentStudent[`day${day}`] = nowStr;
-        renderDayStatus(day, nowStr, configData[`day${day}`]);
-
-      } catch (err) {
-        Swal.fire('ERROR', err.message, 'error');
-        renderDayStatus(day, currentStudent[`day${day}`], configData[`day${day}`]);
-      }
-    }
-
-    function openAdminModal() {
-      document.getElementById('cfg13').checked = configData.day13;
-      document.getElementById('cfg14').checked = configData.day14;
-      document.getElementById('cfg15').checked = configData.day15;
-      document.getElementById('adminPin').value = '';
-      document.getElementById('adminModal').classList.remove('hidden');
-    }
-
-    function closeAdminModal() {
-      document.getElementById('adminModal').classList.add('hidden');
-    }
-
-    async function saveAdminConfig() {
-      const pin = document.getElementById('adminPin').value.trim();
-      if (pin !== '210249') {
-        Swal.fire('รหัสผ่านผิด', 'Admin PIN ไม่ถูกต้อง', 'error');
-        return;
-      }
-
-      const newConfig = {
-        day13: document.getElementById('cfg13').checked,
-        day14: document.getElementById('cfg14').checked,
-        day15: document.getElementById('cfg15').checked
-      };
-
-      Swal.fire({
-        title: 'SAVING CONFIG...',
-        allowOutsideClick: false,
-        didOpen: () => { Swal.showLoading(); }
-      });
-
-      try {
-        await db.from('config').upsert([
-          { key: 'day13', value: newConfig.day13 },
-          { key: 'day14', value: newConfig.day14 },
-          { key: 'day15', value: newConfig.day15 }
-        ]);
-
-        configData = newConfig;
-        Swal.fire('สำเร็จ', 'บันทึกการตั้งค่าเรียบร้อยแล้ว', 'success');
-        closeAdminModal();
-        if (currentStudent) searchStudent();
-      } catch (err) {
-        Swal.fire('ข้อผิดพลาด', err.message, 'error');
-      }
-    }
-  </script>
-</body>
-</html>
