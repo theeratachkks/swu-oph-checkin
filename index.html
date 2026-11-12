@@ -11,42 +11,18 @@
   <!-- Google Fonts: 8-Bit + ฟอนต์ไทย Kanit -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Kanit:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
-    body { 
-      font-family: 'Kanit', sans-serif; 
-      image-rendering: pixelated; 
-    }
+    body { font-family: 'Kanit', sans-serif; image-rendering: pixelated; }
     .pixel-font { font-family: 'Press Start 2P', monospace; }
-    
-    /* สไตล์เงาเหลี่ยมแบบ Pixel Art */
-    .pixel-box {
-      border: 3px solid #000;
-      box-shadow: 3px 3px 0px #000;
-    }
-    .pixel-btn {
-      border: 2px solid #000;
-      box-shadow: 3px 3px 0px #000;
-      transition: all 0.05s ease-in-out;
-    }
-    
+    .pixel-box { border: 3px solid #000; box-shadow: 3px 3px 0px #000; }
     @media (min-width: 640px) {
-      .pixel-box {
-        border: 4px solid #000;
-        box-shadow: 5px 5px 0px #000;
-      }
-      .pixel-btn {
-        border: 3px solid #000;
-        box-shadow: 4px 4px 0px #000;
-      }
+      .pixel-box { border: 4px solid #000; box-shadow: 5px 5px 0px #000; }
     }
-
-    .pixel-btn:hover:not(:disabled) {
-      transform: translate(1px, 1px);
-      box-shadow: 2px 2px 0px #000;
+    .pixel-btn { border: 2px solid #000; box-shadow: 3px 3px 0px #000; transition: all 0.05s ease-in-out; }
+    @media (min-width: 640px) {
+      .pixel-btn { border: 3px solid #000; box-shadow: 4px 4px 0px #000; }
     }
-    .pixel-btn:active:not(:disabled) {
-      transform: translate(3px, 3px);
-      box-shadow: 0px 0px 0px #000;
-    }
+    .pixel-btn:hover:not(:disabled) { transform: translate(1px, 1px); box-shadow: 2px 2px 0px #000; }
+    .pixel-btn:active:not(:disabled) { transform: translate(3px, 3px); box-shadow: 0px 0px 0px #000; }
   </style>
 </head>
 <body class="bg-[#181425] text-slate-900 min-h-screen py-4 px-3 sm:py-8 sm:px-6 relative selection:bg-yellow-400 selection:text-black">
@@ -132,7 +108,7 @@
     </div>
   </div>
 
-  <!-- Modal Admin (ตั้งวันและเวลา 24 ชั่วโมง) -->
+  <!-- Modal Admin (ตั้งวัน เวลา 24 ชม. + โหมดทดสอบเปิดทันที) -->
   <div id="adminModal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50">
     <div class="pixel-box bg-white max-w-lg w-full p-5 sm:p-6 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b-4 border-black pb-2 mb-4">
@@ -141,60 +117,78 @@
       </div>
 
       <div class="space-y-4">
-        <div class="text-xs text-gray-600 font-bold bg-yellow-100 p-2 border-2 border-black">
-          ⏰ ตั้งค่าวันและช่วงเวลาเปิด-ปิดรับลงทะเบียน (เวลาแบบ 24 ชม.):
+        <div class="text-[11px] text-gray-700 font-bold bg-yellow-100 p-2.5 border-2 border-black">
+          💡 <strong>คำแนะนำ:</strong> ในช่วงทดสอบตอนนี้ ให้ติ๊กถูกที่ช่อง <span class="text-emerald-700 font-black">"⚡ บังคับเปิดทันที"</span> เพื่อให้ปุ่มเปิดใช้งานได้ทันทีโดยไม่ต้องรอถึงปี 2569 ครับ
         </div>
 
         <!-- วันที่ 13 -->
         <div class="border-2 border-black p-3 bg-slate-50 space-y-2">
-          <label class="flex items-center gap-2 cursor-pointer font-bold text-xs sm:text-sm text-red-600">
-            <input type="checkbox" id="cfg13" class="w-5 h-5 accent-red-600">
-            <span>เปิดระบบ วันที่ 13 พ.ย. 69</span>
-          </label>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-bold text-gray-700">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+            <label class="flex items-center gap-2 cursor-pointer font-black text-xs sm:text-sm text-red-600">
+              <input type="checkbox" id="cfg13" class="w-4 h-4 accent-red-600">
+              <span>เปิดระบบ วันที่ 13 พ.ย. 69</span>
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer font-bold text-xs text-emerald-700 bg-emerald-50 px-2 py-0.5 border border-emerald-400">
+              <input type="checkbox" id="force13" class="w-3.5 h-3.5 accent-emerald-600">
+              <span>⚡ บังคับเปิดทันที (ทดสอบ)</span>
+            </label>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-bold text-gray-700 pt-1">
             <div>
-              <span class="block mb-1 text-[11px] text-gray-500">▶ เวลาเริ่มเปิด:</span>
-              <input type="datetime-local" id="dt13_start" class="pixel-box w-full px-2 py-1 bg-white">
+              <span class="block mb-1 text-[11px] text-gray-500">▶ เวลาเริ่มเปิด (24 ชม.):</span>
+              <input type="datetime-local" id="dt13_start" class="pixel-box w-full px-2 py-1 bg-white text-xs">
             </div>
             <div>
-              <span class="block mb-1 text-[11px] text-gray-500">▶ เวลาสิ้นสุด:</span>
-              <input type="datetime-local" id="dt13_end" class="pixel-box w-full px-2 py-1 bg-white">
+              <span class="block mb-1 text-[11px] text-gray-500">▶ เวลาสิ้นสุด (24 ชม.):</span>
+              <input type="datetime-local" id="dt13_end" class="pixel-box w-full px-2 py-1 bg-white text-xs">
             </div>
           </div>
         </div>
 
         <!-- วันที่ 14 -->
         <div class="border-2 border-black p-3 bg-slate-50 space-y-2">
-          <label class="flex items-center gap-2 cursor-pointer font-bold text-xs sm:text-sm text-red-600">
-            <input type="checkbox" id="cfg14" class="w-5 h-5 accent-red-600">
-            <span>เปิดระบบ วันที่ 14 พ.ย. 69</span>
-          </label>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-bold text-gray-700">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+            <label class="flex items-center gap-2 cursor-pointer font-black text-xs sm:text-sm text-red-600">
+              <input type="checkbox" id="cfg14" class="w-4 h-4 accent-red-600">
+              <span>เปิดระบบ วันที่ 14 พ.ย. 69</span>
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer font-bold text-xs text-emerald-700 bg-emerald-50 px-2 py-0.5 border border-emerald-400">
+              <input type="checkbox" id="force14" class="w-3.5 h-3.5 accent-emerald-600">
+              <span>⚡ บังคับเปิดทันที (ทดสอบ)</span>
+            </label>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-bold text-gray-700 pt-1">
             <div>
-              <span class="block mb-1 text-[11px] text-gray-500">▶ เวลาเริ่มเปิด:</span>
-              <input type="datetime-local" id="dt14_start" class="pixel-box w-full px-2 py-1 bg-white">
+              <span class="block mb-1 text-[11px] text-gray-500">▶ เวลาเริ่มเปิด (24 ชม.):</span>
+              <input type="datetime-local" id="dt14_start" class="pixel-box w-full px-2 py-1 bg-white text-xs">
             </div>
             <div>
-              <span class="block mb-1 text-[11px] text-gray-500">▶ เวลาสิ้นสุด:</span>
-              <input type="datetime-local" id="dt14_end" class="pixel-box w-full px-2 py-1 bg-white">
+              <span class="block mb-1 text-[11px] text-gray-500">▶ เวลาสิ้นสุด (24 ชม.):</span>
+              <input type="datetime-local" id="dt14_end" class="pixel-box w-full px-2 py-1 bg-white text-xs">
             </div>
           </div>
         </div>
 
         <!-- วันที่ 15 -->
         <div class="border-2 border-black p-3 bg-slate-50 space-y-2">
-          <label class="flex items-center gap-2 cursor-pointer font-bold text-xs sm:text-sm text-red-600">
-            <input type="checkbox" id="cfg15" class="w-5 h-5 accent-red-600">
-            <span>เปิดระบบ วันที่ 15 พ.ย. 69</span>
-          </label>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-bold text-gray-700">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+            <label class="flex items-center gap-2 cursor-pointer font-black text-xs sm:text-sm text-red-600">
+              <input type="checkbox" id="cfg15" class="w-4 h-4 accent-red-600">
+              <span>เปิดระบบ วันที่ 15 พ.ย. 69</span>
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer font-bold text-xs text-emerald-700 bg-emerald-50 px-2 py-0.5 border border-emerald-400">
+              <input type="checkbox" id="force15" class="w-3.5 h-3.5 accent-emerald-600">
+              <span>⚡ บังคับเปิดทันที (ทดสอบ)</span>
+            </label>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-bold text-gray-700 pt-1">
             <div>
-              <span class="block mb-1 text-[11px] text-gray-500">▶ เวลาเริ่มเปิด:</span>
-              <input type="datetime-local" id="dt15_start" class="pixel-box w-full px-2 py-1 bg-white">
+              <span class="block mb-1 text-[11px] text-gray-500">▶ เวลาเริ่มเปิด (24 ชม.):</span>
+              <input type="datetime-local" id="dt15_start" class="pixel-box w-full px-2 py-1 bg-white text-xs">
             </div>
             <div>
-              <span class="block mb-1 text-[11px] text-gray-500">▶ เวลาสิ้นสุด:</span>
-              <input type="datetime-local" id="dt15_end" class="pixel-box w-full px-2 py-1 bg-white">
+              <span class="block mb-1 text-[11px] text-gray-500">▶ เวลาสิ้นสุด (24 ชม.):</span>
+              <input type="datetime-local" id="dt15_end" class="pixel-box w-full px-2 py-1 bg-white text-xs">
             </div>
           </div>
         </div>
@@ -212,11 +206,7 @@
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let studentsData = [];
-    let configData = { 
-      day13: 'true', dt13_start: '2026-11-13T00:00', dt13_end: '2026-11-13T23:59',
-      day14: 'false', dt14_start: '2026-11-14T00:00', dt14_end: '2026-11-14T23:59',
-      day15: 'false', dt15_start: '2026-11-15T00:00', dt15_end: '2026-11-15T23:59'
-    };
+    let configData = {};
     let currentStudent = null;
 
     async function loadData() {
@@ -250,15 +240,19 @@
     }
     loadData();
 
-    // ตรวจสอบวันและเวลาแบบ 24 ชั่วโมง
+    // ฟังก์ชันตรวจสอบสถานะวันและเวลาแบบ 24 ชั่วโมง
     function checkDayStatus(day) {
       const isEnabled = configData[`day${day}`] === 'true';
       if (!isEnabled) return { isOpen: false, reason: 'ปิดรับลงทะเบียน' };
 
+      // ถ้าเปิดโหมดบังคับเปิดสำหรับทดสอบ ให้เปิดทันทีเลย
+      const isForced = configData[`force${day}`] === 'true';
+      if (isForced) return { isOpen: true, reason: 'พร้อมลงทะเบียน' };
+
       const startStr = configData[`dt${day}_start`];
       const endStr = configData[`dt${day}_end`];
 
-      // ถ้าไม่ได้ระบุวันเวลาไว้ ให้ถือว่าเปิดตลอดตามสวิตช์
+      // ถ้าไม่ได้ตั้งเวลาไว้ ให้ถือว่าเปิดตลอดตามสวิตช์
       if (!startStr || !endStr) return { isOpen: true, reason: 'พร้อมลงทะเบียน' };
 
       const now = new Date();
@@ -266,8 +260,7 @@
       const endTime = new Date(endStr);
 
       if (now < startTime) {
-        const timeFormatted = format24H(startTime);
-        return { isOpen: false, reason: `เปิด ${timeFormatted}` };
+        return { isOpen: false, reason: `เปิด ${format24H(startTime)}` };
       }
 
       if (now > endTime) {
@@ -277,15 +270,16 @@
       return { isOpen: true, reason: 'พร้อมลงทะเบียน' };
     }
 
-    // แปลงรูปแบบแสดงผลวันและเวลา 24 ชม. ภาษาไทย
+    // แปลงวันและเวลาแบบ 24 ชั่วโมง พร้อมปี พ.ศ. สองหลัก (/69)
     function format24H(dt) {
-  const d = String(dt.getDate()).padStart(2, '0');
-  const m = String(dt.getMonth() + 1).padStart(2, '0');
-  const y = String(dt.getFullYear() + 543).slice(-2); // แปลงเป็นปี พ.ศ. สองหลัก เช่น '69'
-  const hours = String(dt.getHours()).padStart(2, '0');
-  const minutes = String(dt.getMinutes()).padStart(2, '0');
-  return `${d}/${m}/${y} เวลา ${hours}:${minutes} น.`;
-}
+      const d = String(dt.getDate()).padStart(2, '0');
+      const m = String(dt.getMonth() + 1).padStart(2, '0');
+      const y = String(dt.getFullYear() + 543).slice(-2);
+      const hours = String(dt.getHours()).padStart(2, '0');
+      const minutes = String(dt.getMinutes()).padStart(2, '0');
+      return `${d}/${m}/${y} เวลา ${hours}:${minutes} น.`;
+    }
+
     function searchStudent() {
       const q = document.getElementById('searchInput').value.trim();
       const card = document.getElementById('resultCard');
@@ -390,7 +384,7 @@
       }
     }
 
-    // ล็อกรหัสผ่าน Admin ก่อนเปิดหน้าต่างตั้งค่า
+    // เปิดหน้าต่าง Admin พร้อมกรอกรหัส PIN
     async function openAdminModal() {
       const { value: pin } = await Swal.fire({
         title: '🔐 ADMIN LOGIN',
@@ -416,16 +410,19 @@
         return;
       }
 
-      // ดึงค่าเดิมมาแสดงในช่องกรอก
+      // ดึงค่าเดิมมาแสดงในหน้าต่างตั้งค่า
       document.getElementById('cfg13').checked = (configData.day13 === 'true');
+      document.getElementById('force13').checked = (configData.force13 === 'true');
       document.getElementById('dt13_start').value = configData.dt13_start || '2026-11-13T00:00';
       document.getElementById('dt13_end').value = configData.dt13_end || '2026-11-13T23:59';
 
       document.getElementById('cfg14').checked = (configData.day14 === 'true');
+      document.getElementById('force14').checked = (configData.force14 === 'true');
       document.getElementById('dt14_start').value = configData.dt14_start || '2026-11-14T00:00';
       document.getElementById('dt14_end').value = configData.dt14_end || '2026-11-14T23:59';
 
       document.getElementById('cfg15').checked = (configData.day15 === 'true');
+      document.getElementById('force15').checked = (configData.force15 === 'true');
       document.getElementById('dt15_start').value = configData.dt15_start || '2026-11-15T00:00';
       document.getElementById('dt15_end').value = configData.dt15_end || '2026-11-15T23:59';
 
@@ -439,14 +436,17 @@
     async function saveAdminConfig() {
       const newConfig = [
         { key: 'day13', value: document.getElementById('cfg13').checked ? 'true' : 'false' },
+        { key: 'force13', value: document.getElementById('force13').checked ? 'true' : 'false' },
         { key: 'dt13_start', value: document.getElementById('dt13_start').value || '' },
         { key: 'dt13_end', value: document.getElementById('dt13_end').value || '' },
 
         { key: 'day14', value: document.getElementById('cfg14').checked ? 'true' : 'false' },
+        { key: 'force14', value: document.getElementById('force14').checked ? 'true' : 'false' },
         { key: 'dt14_start', value: document.getElementById('dt14_start').value || '' },
         { key: 'dt14_end', value: document.getElementById('dt14_end').value || '' },
 
         { key: 'day15', value: document.getElementById('cfg15').checked ? 'true' : 'false' },
+        { key: 'force15', value: document.getElementById('force15').checked ? 'true' : 'false' },
         { key: 'dt15_start', value: document.getElementById('dt15_start').value || '' },
         { key: 'dt15_end', value: document.getElementById('dt15_end').value || '' }
       ];
@@ -458,7 +458,8 @@
       });
 
       try {
-        await db.from('config').upsert(newConfig);
+        const { error } = await db.from('config').upsert(newConfig);
+        if (error) throw error;
 
         newConfig.forEach(item => {
           configData[item.key] = item.value;
